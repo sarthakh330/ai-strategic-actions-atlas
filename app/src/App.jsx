@@ -6,7 +6,8 @@ import EventDrawer from './components/EventDrawer';
 import FilterDropdown from './components/FilterDropdown';
 
 function App() {
-  const { events, patterns, entities, stackLayers, actionTypes, entityClasses, loading, error } = useData();
+  const { events, patterns, entities, stackLayers, actionTypes, entityClasses,
+          entityMap, entityClassMap, actionTypeMap, loading, error } = useData();
   const [showSpend, setShowSpend] = useState(false);
   const [selectedEvent, setSelectedEvent] = useState(null);
   const [highlightedPattern, setHighlightedPattern] = useState(null);
@@ -45,13 +46,13 @@ function App() {
     return () => window.removeEventListener('keydown', handleEscKey);
   }, [selectedEvent, highlightedPattern]);
 
-  // Filter events based on active filters
+  // Filter events based on active filters (O(1) lookup with Maps)
   const filteredEvents = useMemo(() => {
     if (!events.length) return [];
 
     return events.filter(event => {
-      // Get entity class for this event
-      const entity = entities.find(e => e.id === event.entity_id);
+      // O(1) lookup instead of O(n) find
+      const entity = entityMap.get(event.entity_id);
       const entityClass = entity?.entity_class;
 
       // Check entity class filter
@@ -71,7 +72,7 @@ function App() {
 
       return true;
     });
-  }, [events, entities, selectedEntityClasses, selectedImpacts, selectedActionTypes]);
+  }, [events, entityMap, selectedEntityClasses, selectedImpacts, selectedActionTypes]);
 
   // Check if any filters are active (not all selected)
   const hasActiveFilters =
@@ -247,6 +248,8 @@ function App() {
             stackLayers={stackLayers}
             entityClasses={entityClasses}
             entities={entities}
+            entityMap={entityMap}
+            entityClassMap={entityClassMap}
             showSpend={showSpend}
             onEventClick={setSelectedEvent}
             highlightedPattern={highlightedPattern}

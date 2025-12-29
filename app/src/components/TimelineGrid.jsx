@@ -6,7 +6,7 @@ import Tooltip from './Tooltip';
  * Main timeline grid component
  * Renders Stack × Time grid with event dots
  */
-export default function TimelineGrid({ events, stackLayers, entityClasses, entities, showSpend, onEventClick, highlightedPattern }) {
+export default function TimelineGrid({ events, stackLayers, entityClasses, entities, entityMap, entityClassMap, showSpend, onEventClick, highlightedPattern }) {
   const [hoveredEvent, setHoveredEvent] = useState(null);
   const [hoveredPosition, setHoveredPosition] = useState({ x: 0, y: 0 });
 
@@ -138,10 +138,9 @@ export default function TimelineGrid({ events, stackLayers, entityClasses, entit
                 {quarters.map((_, qIdx) => (
                   <div key={qIdx} className="absolute inset-0">
                     {eventsByLayerQuarter[layer.id][qIdx].map((event, eventIdx) => {
-                      const entityClass = entityClasses.find(ec => {
-                        const entity = entities.find(e => e.id === event.entity_id);
-                        return entity && ec.id === entity.entity_class;
-                      });
+                      // O(1) Map lookup instead of O(n) nested finds
+                      const entity = entityMap?.get(event.entity_id);
+                      const entityClass = entity ? entityClassMap?.get(entity.entity_class) : null;
 
                       return (
                         <EventDot
@@ -217,10 +216,9 @@ export default function TimelineGrid({ events, stackLayers, entityClasses, entit
                 {quarters.map((_, qIdx) => (
                   <div key={qIdx} className="absolute inset-0">
                     {eventsByLayerQuarter[layer.id][qIdx].map((event, eventIdx) => {
-                      const entityClass = entityClasses.find(ec => {
-                        const entity = entities.find(e => e.id === event.entity_id);
-                        return entity && ec.id === entity.entity_class;
-                      });
+                      // O(1) Map lookup instead of O(n) nested finds
+                      const entity = entityMap?.get(event.entity_id);
+                      const entityClass = entity ? entityClassMap?.get(entity.entity_class) : null;
 
                       return (
                         <EventDot
