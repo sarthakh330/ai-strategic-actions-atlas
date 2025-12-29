@@ -1,0 +1,42 @@
+[
+  {
+    "id": "product-launch",
+    "name": "Product Launch",
+    "description": "New product, feature, or model release"
+  },
+  {
+    "id": "acquisition",
+    "name": "Acquisition",
+    "description": "Company acquisition (M&A)"
+  },
+  {
+    "id": "acquihire",
+    "name": "Acquihire",
+    "description": "Acquisition primarily for talent, not product"
+  },
+  {
+    "id": "investment",
+    "name": "Investment",
+    "description": "Funding round or strategic investment"
+  },
+  {
+    "id": "partnership",
+    "name": "Partnership",
+    "description": "Strategic partnership, integration, or collaboration"
+  },
+  {
+    "id": "open-source-release",
+    "name": "Open Source Release",
+    "description": "Open-sourcing a model, framework, or tool"
+  },
+  {
+    "id": "platform-shift",
+    "name": "Platform Shift",
+    "description": "API change, pivot, or platform strategy change (e.g., vertical integration, pricing changes)"
+  },
+  {
+    "id": "organizational-change",
+    "name": "Organizational Change",
+    "description": "Restructuring, leadership change, or internal reorganization"
+  }
+]

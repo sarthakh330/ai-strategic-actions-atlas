@@ -1,0 +1,597 @@
+# AI Strategic Actions Atlas — Data Model (Draft v0.1)
+# Status: Conceptual draft, not yet implemented
+# Purpose: Define entity schemas and relationships before implementation
+
+# =============================================================================
+# CORE ENTITIES
+# =============================================================================
+
+Event:
+  description: "A strategic action taken by an entity at a specific time and stack position"
+  status: "Evidence layer — must be backed by primary sources"
+
+  fields:
+    id:
+      type: string
+      required: true
+      description: "Unique identifier (e.g., 'openai-gpt4-launch-2023q1')"
+
+    title:
+      type: string
+      required: true
+      description: "Human-readable event name (e.g., 'GPT-4 Launch')"
+      constraints: "Max 80 characters"
+
+    entity_id:
+      type: reference(Entity)
+      required: true
+      description: "The organization that took this action"
+
+    date:
+      type: date
+      required: true
+      description: "Action date (YYYY-MM-DD). Use announced date if effective date unknown."
+      constraints: "Must be between 2023-01-01 and 2025-12-31 for v0"
+
+    date_precision:
+      type: enum
+      required: true
+      values: ["exact", "month", "quarter", "year"]
+      description: "Granularity of date information"
+
+    action_type:
+      type: reference(ActionType)
+      required: true
+      description: "Category of strategic action"
+
+    stack_layers:
+      type: array[reference(StackLayer)]
+      required: true
+      description: "One or more stack positions this action impacts"
+      constraints: "At least one layer required"
+
+    impact_level:
+      type: enum
+      required: true
+      values: ["high", "medium", "low"]
+      description: "Assessed significance (inferred, not stated)"
+
+    impact_reasoning:
+      type: string
+      required: false
+      description: "Why this impact level was assigned (for internal review)"
+
+    description:
+      type: text
+      required: true
+      description: "1-3 sentence summary of what happened"
+      constraints: "Max 500 characters"
+
+    strategic_significance:
+      type: text
+      required: false
+      description: "Why this matters strategically (interpretation layer)"
+      constraints: "Max 1000 characters. Must be labeled as interpretation."
+
+    evidence_sources:
+      type: array[reference(EvidenceSource)]
+      required: true
+      description: "Primary sources confirming this event"
+      constraints: "At least one source required"
+
+    confidence:
+      type: enum
+      required: true
+      values: ["confirmed", "likely", "rumored"]
+      description: |
+        - confirmed: Multiple credible sources, official announcement
+        - likely: Single credible source or strong indirect evidence
+        - rumored: Unconfirmed reports, speculation
+
+    status:
+      type: enum
+      required: true
+      values: ["published", "review", "draft"]
+      description: "Editorial status"
+
+    related_events:
+      type: array[reference(Event)]
+      required: false
+      description: "Other events in a sequence or cluster"
+
+    pattern_memberships:
+      type: array[reference(Pattern)]
+      required: false
+      description: "Patterns this event contributes to"
+
+    metadata:
+      type: object
+      required: false
+      fields:
+        created_at: datetime
+        updated_at: datetime
+        created_by: string
+        tags: array[string]
+
+# -----------------------------------------------------------------------------
+
+Entity:
+  description: "An organization (company, lab, foundation) that takes strategic actions"
+
+  fields:
+    id:
+      type: string
+      required: true
+      description: "Unique identifier (e.g., 'openai', 'google-deepmind')"
+
+    name:
+      type: string
+      required: true
+      description: "Full legal or common name"
+
+    display_name:
+      type: string
+      required: true
+      description: "Short name for UI (e.g., 'OpenAI' not 'OpenAI, Inc.')"
+
+    entity_class:
+      type: reference(EntityClass)
+      required: true
+      description: "Category for visual coding (color in UI)"
+
+    description:
+      type: text
+      required: false
+      description: "1-2 sentence summary of what this entity does"
+
+    founded_year:
+      type: integer
+      required: false
+      description: "Year founded (for context)"
+
+    website:
+      type: url
+      required: false
+      description: "Primary website"
+
+    logo_url:
+      type: url
+      required: false
+      description: "Company logo for UI (optional)"
+
+    parent_entity_id:
+      type: reference(Entity)
+      required: false
+      description: "Parent company if subsidiary (e.g., DeepMind → Google)"
+
+    status:
+      type: enum
+      required: true
+      values: ["active", "acquired", "defunct"]
+      description: "Current operational status"
+
+    metadata:
+      type: object
+      required: false
+      fields:
+        aliases: array[string]
+        former_names: array[string]
+
+# -----------------------------------------------------------------------------
+
+StackLayer:
+  description: "A position in the AI stack where strategic actions occur"
+  status: "Opinionated — layers must earn their place through action density"
+
+  fields:
+    id:
+      type: string
+      required: true
+      description: "Unique identifier (e.g., 'model-apis', 'horizontal-ai')"
+
+    name:
+      type: string
+      required: true
+      description: "Display name (e.g., 'Model APIs')"
+
+    category:
+      type: enum
+      required: true
+      values: ["applications", "infrastructure"]
+      description: "Top-level grouping"
+
+    description:
+      type: text
+      required: true
+      description: "What this layer encompasses"
+
+    examples:
+      type: array[string]
+      required: false
+      description: "Example products/services (e.g., 'Inference, Fine-tuning')"
+
+    sort_order:
+      type: integer
+      required: true
+      description: "Vertical position in UI (lower number = higher in stack)"
+
+    justification:
+      type: text
+      required: false
+      description: "Why this layer exists (references to Menlo report, etc.)"
+
+    status:
+      type: enum
+      required: true
+      values: ["active", "proposed", "deprecated"]
+      description: |
+        - active: Sufficient action density, visualized in main view
+        - proposed: Under consideration, not yet in main view
+        - deprecated: Was active, now merged into another layer
+
+# -----------------------------------------------------------------------------
+
+ActionType:
+  description: "Category of strategic action (how an entity acts)"
+
+  fields:
+    id:
+      type: string
+      required: true
+      description: "Unique identifier (e.g., 'acquisition', 'product-launch')"
+
+    name:
+      type: string
+      required: true
+      description: "Display name (e.g., 'Acquisition', 'Product Launch')"
+
+    description:
+      type: text
+      required: true
+      description: "What qualifies as this action type"
+
+    color:
+      type: string
+      required: false
+      description: "UI color for filtering/tagging (hex code)"
+
+    examples:
+      type: array[string]
+      required: false
+      description: "Example events of this type"
+
+  predefined_types:
+    - id: "product-launch"
+      name: "Product Launch"
+      description: "New product, feature, or model release"
+
+    - id: "acquisition"
+      name: "Acquisition"
+      description: "Company acquisition (M&A)"
+
+    - id: "acquihire"
+      name: "Acquihire"
+      description: "Acquisition primarily for talent, not product"
+
+    - id: "investment"
+      name: "Investment"
+      description: "Funding round or strategic investment"
+
+    - id: "partnership"
+      name: "Partnership"
+      description: "Strategic partnership, integration, or collaboration"
+
+    - id: "open-source-release"
+      name: "Open Source Release"
+      description: "Open-sourcing a model, framework, or tool"
+
+    - id: "platform-shift"
+      name: "Platform Shift"
+      description: "API change, pivot, or platform strategy change"
+
+    - id: "organizational-change"
+      name: "Organizational Change"
+      description: "Restructuring, leadership change, or internal reorganization"
+
+# -----------------------------------------------------------------------------
+
+EntityClass:
+  description: "Category of entity (visual coding in UI via color)"
+
+  fields:
+    id:
+      type: string
+      required: true
+
+    name:
+      type: string
+      required: true
+
+    color:
+      type: string
+      required: true
+      description: "Tailwind color class or hex code"
+
+    description:
+      type: text
+      required: false
+
+  predefined_classes:
+    - id: "big-tech"
+      name: "Big Tech"
+      color: "slate-700"  # Dark gray
+      description: "Large technology incumbents (Google, Microsoft, Amazon, Apple, Meta)"
+
+    - id: "startup"
+      name: "Startup"
+      color: "indigo-600"  # Blue
+      description: "Venture-backed startups and scale-ups"
+
+    - id: "frontier-lab"
+      name: "Frontier Lab"
+      color: "emerald-600"  # Green
+      description: "AI-first research organizations (OpenAI, Anthropic, DeepMind)"
+
+    - id: "open-source"
+      name: "Open Source"
+      color: "amber-600"  # Orange
+      description: "Open source projects and foundations"
+
+# -----------------------------------------------------------------------------
+
+EvidenceSource:
+  description: "A primary source confirming an event (URLs, filings, announcements)"
+  status: "Evidence layer — required for all events"
+
+  fields:
+    id:
+      type: string
+      required: true
+
+    url:
+      type: url
+      required: true
+      description: "Link to source"
+
+    source_type:
+      type: enum
+      required: true
+      values: ["official-announcement", "press-release", "news-article", "filing", "blog-post", "social-media"]
+
+    title:
+      type: string
+      required: true
+      description: "Source title or headline"
+
+    publisher:
+      type: string
+      required: false
+      description: "Publisher name (e.g., 'TechCrunch', 'OpenAI Blog')"
+
+    date:
+      type: date
+      required: false
+      description: "Publication date"
+
+    credibility:
+      type: enum
+      required: true
+      values: ["primary", "credible-secondary", "unverified"]
+      description: |
+        - primary: Official source (company blog, SEC filing)
+        - credible-secondary: Reputable journalism (NYT, WSJ, The Information)
+        - unverified: Social media, rumors, unconfirmed reports
+
+    archived_url:
+      type: url
+      required: false
+      description: "Archive.org link (for dead links)"
+
+# =============================================================================
+# INTERPRETATION LAYER
+# =============================================================================
+
+Pattern:
+  description: "A derived strategic pattern or motif observed across multiple events"
+  status: "Interpretation layer — hypotheses, not facts"
+
+  fields:
+    id:
+      type: string
+      required: true
+      description: "Unique identifier (e.g., 'model-api-consolidation-2024')"
+
+    title:
+      type: string
+      required: true
+      description: "Pattern name (e.g., 'Model API Consolidation')"
+
+    pattern_type:
+      type: enum
+      required: true
+      values: ["consolidation-motif", "strategic-pivot", "tech-stack-shift", "pressure-field", "other"]
+      description: "Category of pattern"
+
+    description:
+      type: text
+      required: true
+      description: "What is this pattern? (2-3 sentences)"
+
+    thesis:
+      type: text
+      required: true
+      description: "The interpretive claim (hypothesis)"
+      constraints: "Must be written as a hypothesis, not fact"
+
+    time_range:
+      type: object
+      required: true
+      fields:
+        start: date
+        end: date
+      description: "Time period where this pattern is observed"
+
+    affected_layers:
+      type: array[reference(StackLayer)]
+      required: false
+      description: "Stack layers where this pattern manifests"
+
+    supporting_events:
+      type: array[reference(Event)]
+      required: true
+      description: "Events that support this pattern"
+      constraints: "At least 3 events required for a pattern"
+
+    counter_signals:
+      type: array[reference(Event)]
+      required: false
+      description: "Events that complicate or contradict this pattern"
+
+    confidence:
+      type: enum
+      required: true
+      values: ["high", "medium", "low"]
+      description: |
+        - high: Strong evidence, minimal counter-signals, multiple independent sources
+        - medium: Moderate evidence, some counter-signals or gaps
+        - low: Emerging pattern, significant uncertainty or contradictions
+
+    confidence_reasoning:
+      type: text
+      required: true
+      description: "Why this confidence level? What evidence/gaps exist?"
+
+    status:
+      type: enum
+      required: true
+      values: ["published", "under-review", "deprecated"]
+
+    metadata:
+      type: object
+      required: false
+      fields:
+        created_at: datetime
+        updated_at: datetime
+        author: string
+        reviewers: array[string]
+
+# =============================================================================
+# MARKET REALITY LAYER (OPTIONAL FOR V0)
+# =============================================================================
+
+MarketMetric:
+  description: "Aggregated market data (spend, adoption) from credible reports"
+  status: "Market reality layer — separate from events and patterns"
+  note: "May be deferred to post-MVP"
+
+  fields:
+    id:
+      type: string
+      required: true
+
+    metric_name:
+      type: string
+      required: true
+      description: "E.g., 'Total AI Application Spend', 'Model API Market Share'"
+
+    value:
+      type: number
+      required: true
+
+    unit:
+      type: string
+      required: true
+      description: "E.g., 'USD billions', 'percentage', 'thousands of users'"
+
+    time_period:
+      type: object
+      required: true
+      fields:
+        year: integer
+        quarter: integer
+      description: "When this metric was measured"
+
+    stack_layer:
+      type: reference(StackLayer)
+      required: false
+      description: "If metric is layer-specific"
+
+    source:
+      type: reference(EvidenceSource)
+      required: true
+      description: "Report or study source (e.g., Menlo Ventures report)"
+
+    status:
+      type: enum
+      required: true
+      values: ["confirmed", "estimated", "projected"]
+
+# =============================================================================
+# RELATIONSHIPS AND CONSTRAINTS
+# =============================================================================
+
+relationships:
+  Event_to_Entity:
+    type: "many-to-one"
+    description: "Each event is taken by one entity"
+
+  Event_to_StackLayer:
+    type: "many-to-many"
+    description: "An event can impact multiple stack layers"
+
+  Event_to_ActionType:
+    type: "many-to-one"
+    description: "Each event has one primary action type"
+
+  Event_to_EvidenceSource:
+    type: "many-to-many"
+    description: "An event must have at least one evidence source"
+
+  Event_to_Pattern:
+    type: "many-to-many"
+    description: "An event can be part of multiple patterns"
+
+  Pattern_to_Event:
+    type: "one-to-many"
+    description: "A pattern references multiple events (min 3)"
+
+  Entity_to_Entity:
+    type: "self-referential (parent-child)"
+    description: "Entities can have parent entities (e.g., DeepMind → Google)"
+
+constraints:
+  temporal:
+    - "All Event dates must be within project time range (2023-2025 for v0)"
+    - "Pattern time_range must encompass all supporting_events dates"
+
+  evidential:
+    - "Every Event must have at least one EvidenceSource with credibility ≥ 'credible-secondary'"
+    - "Events with confidence='rumored' must be visually distinguished in UI"
+
+  structural:
+    - "A StackLayer is 'active' only if ≥5 Events reference it"
+    - "A Pattern requires ≥3 supporting_events to be published"
+
+  epistemic:
+    - "Pattern descriptions must be written as hypotheses ('suggests', 'appears to', 'may indicate')"
+    - "strategic_significance in Events must be clearly labeled as interpretation in UI"
+
+# =============================================================================
+# OPEN QUESTIONS (TO BE RESOLVED)
+# =============================================================================
+
+open_questions:
+  - "Should we track 'rumored' events at all, or only confirmed/likely?"
+  - "How do we handle events that span multiple quarters (e.g., rolling acquihires)?"
+  - "Do we need a 'Strength' field for Pattern relationships (weak/strong signal)?"
+  - "Should MarketMetric be in scope for MVP or deferred?"
+  - "How do we version Patterns when new evidence changes confidence?"
+  - "Do we need explicit 'anti-patterns' (e.g., 'No consolidation in X layer')?"
+
+# =============================================================================
+# SCHEMA VERSION
+# =============================================================================
+
+version: "0.1.0-draft"
+last_updated: "2025-12-28"
+status: "Conceptual — not yet implemented"

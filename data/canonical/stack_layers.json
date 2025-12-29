@@ -1,0 +1,59 @@
+[
+  {
+    "id": "horizontal-ai",
+    "name": "Horizontal AI",
+    "category": "applications",
+    "description": "General-purpose AI assistants and copilots used across all functions (ChatGPT Enterprise, Microsoft 365 Copilot, Claude for Work)",
+    "examples": ["Assistants", "Search", "General Copilots"],
+    "sort_order": 1,
+    "status": "active"
+  },
+  {
+    "id": "departmental-ai",
+    "name": "Departmental AI",
+    "category": "applications",
+    "description": "AI solutions built for specific job roles and departments (coding, sales, marketing, customer success, design, HR)",
+    "examples": ["Coding (Cursor, GitHub Copilot)", "Sales (Clay)", "Customer Success", "IT Operations"],
+    "sort_order": 2,
+    "status": "active"
+  },
+  {
+    "id": "vertical-ai",
+    "name": "Vertical AI",
+    "category": "applications",
+    "description": "Industry-specific AI applications targeting sectors like healthcare, legal, finance, and government",
+    "examples": ["Healthcare (Abridge, Nuance DAX)", "Legal (Eve)", "Finance", "Creator Tools"],
+    "sort_order": 3,
+    "status": "active"
+  },
+  {
+    "id": "model-apis",
+    "name": "Model APIs",
+    "category": "infrastructure",
+    "description": "Foundation model inference and fine-tuning APIs that power AI applications",
+    "examples": ["Inference APIs", "Fine-tuning", "Model Serving"],
+    "sort_order": 4,
+    "justification": "Model APIs are the largest infrastructure spend category at $12.5B (2025), per Menlo Ventures report",
+    "status": "active"
+  },
+  {
+    "id": "training-compute",
+    "name": "Training & Compute",
+    "category": "infrastructure",
+    "description": "GPU infrastructure, training platforms, and custom silicon for model development",
+    "examples": ["GPUs", "Training Platforms", "Custom Silicon", "Fine-tuning Infrastructure"],
+    "sort_order": 5,
+    "justification": "Training infrastructure reached $4.0B (2025), essential for frontier labs and enterprise fine-tuning",
+    "status": "active"
+  },
+  {
+    "id": "data-orch-obs",
+    "name": "Data / Orch. / Obs.",
+    "category": "infrastructure",
+    "description": "Data infrastructure, orchestration frameworks, vector databases, and observability tools for AI applications",
+    "examples": ["Vector DBs (Pinecone)", "Orchestration (LangChain)", "Evals (Braintrust)", "Workflow (Temporal)"],
+    "sort_order": 6,
+    "justification": "AI infrastructure reached $1.5B (2025), combining data management, orchestration, and observability",
+    "status": "active"
+  }
+]

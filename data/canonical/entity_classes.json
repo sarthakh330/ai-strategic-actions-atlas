@@ -1,0 +1,26 @@
+[
+  {
+    "id": "big-tech",
+    "name": "Big Tech",
+    "color": "#334155",
+    "description": "Large technology incumbents with established distribution and infrastructure (Google, Microsoft, Amazon, Apple, Meta)"
+  },
+  {
+    "id": "startup",
+    "name": "Startup",
+    "color": "#4f46e5",
+    "description": "Venture-backed startups and scale-ups building AI-native products and platforms"
+  },
+  {
+    "id": "frontier-lab",
+    "name": "Frontier Lab",
+    "color": "#059669",
+    "description": "AI-first research organizations developing foundation models (OpenAI, Anthropic, DeepMind)"
+  },
+  {
+    "id": "open-source",
+    "name": "Open Source",
+    "color": "#d97706",
+    "description": "Open source projects, foundations, and organizations releasing models and tools"
+  }
+]

@@ -1,0 +1,253 @@
+[
+  {
+    "id": "openai",
+    "name": "OpenAI",
+    "display_name": "OpenAI",
+    "entity_class": "frontier-lab",
+    "description": "AI research lab developing GPT models and ChatGPT",
+    "founded_year": 2015,
+    "website": "https://openai.com",
+    "status": "active"
+  },
+  {
+    "id": "anthropic",
+    "name": "Anthropic",
+    "display_name": "Anthropic",
+    "entity_class": "frontier-lab",
+    "description": "AI safety company building Claude foundation models",
+    "founded_year": 2021,
+    "website": "https://anthropic.com",
+    "status": "active"
+  },
+  {
+    "id": "google",
+    "name": "Google",
+    "display_name": "Google",
+    "entity_class": "big-tech",
+    "description": "Technology giant developing Gemini models and Vertex AI platform",
+    "founded_year": 1998,
+    "website": "https://google.com",
+    "status": "active"
+  },
+  {
+    "id": "microsoft",
+    "name": "Microsoft Corporation",
+    "display_name": "Microsoft",
+    "entity_class": "big-tech",
+    "description": "Cloud and productivity software leader with Azure AI and Copilot products",
+    "founded_year": 1975,
+    "website": "https://microsoft.com",
+    "status": "active"
+  },
+  {
+    "id": "meta",
+    "name": "Meta Platforms",
+    "display_name": "Meta",
+    "entity_class": "big-tech",
+    "description": "Social media giant releasing open-weight Llama models",
+    "founded_year": 2004,
+    "website": "https://ai.meta.com",
+    "status": "active"
+  },
+  {
+    "id": "github",
+    "name": "GitHub",
+    "display_name": "GitHub",
+    "entity_class": "big-tech",
+    "parent_entity_id": "microsoft",
+    "description": "Developer platform owned by Microsoft, creator of GitHub Copilot",
+    "founded_year": 2008,
+    "website": "https://github.com",
+    "status": "active"
+  },
+  {
+    "id": "cursor",
+    "name": "Cursor",
+    "display_name": "Cursor",
+    "entity_class": "startup",
+    "description": "AI-native code editor with advanced multi-file editing and repo-level context",
+    "founded_year": 2023,
+    "website": "https://cursor.sh",
+    "status": "active"
+  },
+  {
+    "id": "langchain",
+    "name": "LangChain",
+    "display_name": "LangChain",
+    "entity_class": "startup",
+    "description": "Framework for building LLM-powered applications with orchestration tools",
+    "founded_year": 2022,
+    "website": "https://langchain.com",
+    "status": "active"
+  },
+  {
+    "id": "pinecone",
+    "name": "Pinecone",
+    "display_name": "Pinecone",
+    "entity_class": "startup",
+    "description": "Vector database for AI applications and retrieval-augmented generation",
+    "founded_year": 2019,
+    "website": "https://pinecone.io",
+    "status": "active"
+  },
+  {
+    "id": "replicate",
+    "name": "Replicate",
+    "display_name": "Replicate",
+    "entity_class": "startup",
+    "description": "Cloud platform for running AI models with specialized inference infrastructure",
+    "founded_year": 2019,
+    "website": "https://replicate.com",
+    "status": "active"
+  },
+  {
+    "id": "databricks",
+    "name": "Databricks",
+    "display_name": "Databricks",
+    "entity_class": "startup",
+    "description": "Data lakehouse platform with AI training and serving capabilities",
+    "founded_year": 2013,
+    "website": "https://databricks.com",
+    "status": "active"
+  },
+  {
+    "id": "snowflake",
+    "name": "Snowflake",
+    "display_name": "Snowflake",
+    "entity_class": "startup",
+    "description": "Cloud data platform extending into AI application infrastructure",
+    "founded_year": 2012,
+    "website": "https://snowflake.com",
+    "status": "active"
+  },
+  {
+    "id": "salesforce",
+    "name": "Salesforce",
+    "display_name": "Salesforce",
+    "entity_class": "big-tech",
+    "description": "CRM platform launching Agentforce autonomous agent platform",
+    "founded_year": 1999,
+    "website": "https://salesforce.com",
+    "status": "active"
+  },
+  {
+    "id": "clay",
+    "name": "Clay",
+    "display_name": "Clay",
+    "entity_class": "startup",
+    "description": "AI-native sales platform for research, enrichment, and personalization",
+    "founded_year": 2021,
+    "website": "https://clay.com",
+    "status": "active"
+  },
+  {
+    "id": "abridge",
+    "name": "Abridge",
+    "display_name": "Abridge",
+    "entity_class": "startup",
+    "description": "Healthcare AI for ambient clinical documentation and medical scribes",
+    "founded_year": 2018,
+    "website": "https://abridge.com",
+    "status": "active"
+  },
+  {
+    "id": "ambience",
+    "name": "Ambience Healthcare",
+    "display_name": "Ambience",
+    "entity_class": "startup",
+    "description": "Healthcare AI for ambient clinical documentation and medical scribes",
+    "founded_year": 2020,
+    "website": "https://ambiencehealthcare.com",
+    "status": "active"
+  },
+  {
+    "id": "eve",
+    "name": "Eve",
+    "display_name": "Eve",
+    "entity_class": "startup",
+    "description": "Legal AI platform for document analysis and workflow automation",
+    "founded_year": 2021,
+    "website": "https://eve.ai",
+    "status": "active"
+  },
+  {
+    "id": "deepseek",
+    "name": "DeepSeek",
+    "display_name": "DeepSeek",
+    "entity_class": "open-source",
+    "description": "Chinese AI lab releasing open-weight models (V3, R1)",
+    "founded_year": 2023,
+    "website": "https://deepseek.com",
+    "status": "active"
+  },
+  {
+    "id": "temporal",
+    "name": "Temporal",
+    "display_name": "Temporal",
+    "entity_class": "startup",
+    "description": "Workflow orchestration platform for AI applications",
+    "founded_year": 2019,
+    "website": "https://temporal.io",
+    "status": "active"
+  },
+  {
+    "id": "braintrust",
+    "name": "Braintrust",
+    "display_name": "Braintrust",
+    "entity_class": "startup",
+    "description": "AI observability platform with evals, tracing, and continuous learning",
+    "founded_year": 2022,
+    "website": "https://braintrustdata.com",
+    "status": "active"
+  },
+  {
+    "id": "fireworks-ai",
+    "name": "Fireworks.ai",
+    "display_name": "Fireworks.ai",
+    "entity_class": "startup",
+    "description": "Generative AI inference platform with regional compliance and high-throughput capabilities",
+    "founded_year": 2022,
+    "website": "https://fireworks.ai",
+    "status": "active"
+  },
+  {
+    "id": "together-ai",
+    "name": "Together.ai",
+    "display_name": "Together.ai",
+    "entity_class": "startup",
+    "description": "Open-source model platform pivoting to specialized fine-tuning",
+    "founded_year": 2022,
+    "website": "https://together.ai",
+    "status": "active"
+  },
+  {
+    "id": "n8n",
+    "name": "n8n",
+    "display_name": "n8n",
+    "entity_class": "startup",
+    "description": "Open-source workflow automation platform with AI integration",
+    "founded_year": 2019,
+    "website": "https://n8n.io",
+    "status": "active"
+  },
+  {
+    "id": "elevenlabs",
+    "name": "ElevenLabs",
+    "display_name": "ElevenLabs",
+    "entity_class": "startup",
+    "description": "Voice AI platform for text-to-speech and voice cloning",
+    "founded_year": 2022,
+    "website": "https://elevenlabs.io",
+    "status": "active"
+  },
+  {
+    "id": "lovable",
+    "name": "Lovable",
+    "display_name": "Lovable",
+    "entity_class": "startup",
+    "description": "AI application builder for rapid prototyping and development",
+    "founded_year": 2023,
+    "website": "https://lovable.dev",
+    "status": "active"
+  }
+]

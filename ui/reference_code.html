@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>AI Strategic Actions Atlas - Full-Width Strategic Map</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#111111", 
+                        "background-light": "#ffffff",
+                        "border-subtle": "#e5e5e5",
+                        "text-main": "#171717",
+                        "text-muted": "#737373",
+                        "legend-bigtech": "#334155", // Slate 700
+                        "legend-startup": "#4f46e5", // Indigo 600
+                        "legend-lab": "#059669",     // Emerald 600
+                        "legend-opensource": "#d97706", // Amber 600
+                    },
+                    fontFamily: {
+                        "display": ["Space Grotesk", "sans-serif"],
+                        "body": ["Inter", "sans-serif"],
+                    },
+                    boxShadow: {
+                        'soft': '0 2px 10px rgba(0, 0, 0, 0.03)',
+                        'dot': '0 1px 2px rgba(0,0,0,0.1), 0 0 0 1px #ffffff',
+                        'dot-hover': '0 4px 12px rgba(0,0,0,0.15), 0 0 0 2px #ffffff',
+                        'active-slice': 'inset 0 0 0 1px #000000, inset 0 0 0 2px rgba(255,255,255,0.5)',
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #d4d4d4;
+            border-radius: 0px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #a3a3a3;
+        }
+        .timeline-cell {
+            position: relative;
+        }
+        .timeline-grid-line {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            border-left: 1px dashed #f3f3f3;
+            z-index: 0;
+            pointer-events: none;
+        }
+        .timeline-year-line {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            border-left: 1px solid #e5e5e5;
+            z-index: 0;
+            pointer-events: none;
+        }
+        .timeline-cell:hover::after {
+            content: '';
+            position: absolute;
+            top: 0; bottom: 0;
+            width: 1px;
+            background: #d4d4d4;
+            left: var(--mouse-x, 50%);
+            z-index: 1;
+            pointer-events: none;
+            display: none;
+        }
+        .event-dot {
+            position: absolute;
+            border-radius: 50%;
+            top: 50%;
+            transform: translateY(-50%) scale(1);
+            transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            z-index: 10;
+            cursor: pointer;
+            box-shadow: 0 0 0 1px #fff, 0 1px 2px rgba(0,0,0,0.1);
+        }
+        .event-dot:hover {
+            transform: translateY(-50%) scale(1.2);
+            z-index: 50;
+            box-shadow: 0 0 0 2px #fff, 0 4px 12px rgba(0,0,0,0.2);
+        }
+        .event-dot.active {
+            box-shadow: 0 0 0 2px #fff, 0 0 0 2px #000;z-index: 40;
+        }
+        .event-dot .tooltip {
+            visibility: hidden;
+            position: absolute;
+            bottom: 140%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #171717;
+            color: #fff;
+            padding: 8px 12px;
+            border-radius: 2px;
+            font-size: 11px;
+            line-height: 1.4;
+            white-space: nowrap;
+            opacity: 0;
+            transition: opacity 0.15s;
+            z-index: 100;
+            pointer-events: none;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            border: 1px solid #333;
+            font-weight: 400;
+            text-align: left;
+        }
+        .event-dot .tooltip b {
+            font-weight: 600;
+            display: block;
+            margin-bottom: 2px;
+        }
+        .event-dot .tooltip::after {
+            content: "";
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            margin-left: -4px;
+            border-width: 4px;
+            border-style: solid;
+            border-color: #171717 transparent transparent transparent;
+        }
+        .event-dot:hover .tooltip {
+            visibility: visible;
+            opacity: 1;
+        }
+        #details-drawer {
+            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .dot-sm { width: 8px; height: 8px; }
+        .dot-md { width: 12px; height: 12px; }
+        .dot-lg { width: 18px; height: 18px; }
+        .grayscale-dots .event-dot {
+            background-color: #737373 !important;border-color: #737373 !important;
+        }
+    </style>
+</head>
+<body class="bg-background-light text-text-main font-body h-screen flex flex-col overflow-hidden selection:bg-black selection:text-white">
+<header class="flex-none bg-white border-b border-border-subtle z-40 relative">
+<div class="px-6 py-3 flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+<div class="flex flex-col gap-0.5 min-w-[220px]">
+<h1 class="text-base font-display font-medium tracking-tight text-text-main flex items-center gap-2">
+<span class="material-symbols-outlined text-lg">grid_view</span>
+                AI Strategic Actions Atlas
+            </h1>
+<p class="text-text-muted text-[10px] font-medium tracking-wide pl-7 uppercase">Evolution Map 2023–2025</p>
+</div>
+<div class="flex flex-1 items-center gap-6 justify-center">
+<div class="flex items-center gap-2 text-xs">
+<div class="flex items-center border-r border-gray-200 pr-4 mr-2 gap-3">
+<div class="relative group">
+<button class="flex items-center gap-2 px-2 py-1.5 border border-gray-200 rounded-sm hover:border-gray-400 hover:bg-gray-50 transition-all bg-white shadow-sm ring-1 ring-black/5">
+<span class="font-medium text-text-main">Entity Class</span>
+<div class="w-2 h-2 rounded-full bg-gradient-to-br from-indigo-500 to-emerald-500"></div>
+<span class="material-symbols-outlined text-text-muted text-sm">check</span>
+</button>
+</div>
+<div class="hidden xl:flex items-center gap-3 text-[10px] text-text-muted">
+<div class="flex items-center gap-1.5"><span class="w-1.5 h-1.5 rounded-full bg-slate-700"></span>Big Tech</div>
+<div class="flex items-center gap-1.5"><span class="w-1.5 h-1.5 rounded-full bg-indigo-600"></span>Startup</div>
+<div class="flex items-center gap-1.5"><span class="w-1.5 h-1.5 rounded-full bg-emerald-600"></span>Frontier Lab</div>
+<div class="flex items-center gap-1.5"><span class="w-1.5 h-1.5 rounded-full bg-amber-600"></span>Open Source</div>
+</div>
+</div>
+<button class="flex items-center gap-2 px-3 py-1.5 border border-gray-200 rounded-sm hover:border-gray-400 hover:bg-gray-50 transition-all bg-white text-text-muted">
+<span class="font-medium text-text-main">Impact</span>
+<span class="material-symbols-outlined text-text-muted text-sm">expand_more</span>
+</button>
+<button class="flex items-center gap-2 px-3 py-1.5 border border-gray-200 rounded-sm hover:border-gray-400 hover:bg-gray-50 transition-all bg-white text-text-muted">
+<span class="font-medium text-text-main">Action Type</span>
+<span class="material-symbols-outlined text-text-muted text-sm">expand_more</span>
+</button>
+</div>
+</div>
+<div class="flex items-center gap-3 min-w-[140px] justify-end">
+<span class="text-[10px] font-medium text-text-muted uppercase tracking-wider">Show Spend</span>
+<button class="relative inline-flex h-4 w-8 items-center rounded-full bg-gray-200 transition-colors focus:outline-none hover:bg-gray-300">
+<span class="translate-x-0.5 inline-block h-3 w-3 transform rounded-full bg-white shadow transition-transform duration-200 ease-in-out"></span>
+</button>
+</div>
+</div>
+</header>
+<div class="flex-1 flex overflow-hidden relative bg-white">
+<main class="flex-1 flex flex-col overflow-y-auto bg-white relative scroll-smooth w-full" id="main-scroll">
+<div class="flex-1 min-w-[900px] flex flex-col pb-12">
+<div class="sticky top-0 bg-white/95 backdrop-blur-sm z-30 border-b border-black pt-4 pb-2 px-6 shadow-sm">
+<div class="grid grid-cols-[180px_1fr] gap-0">
+<div class="flex items-end pb-2 pl-2">
+<span class="text-[10px] font-bold text-text-muted uppercase tracking-widest">Stack Row</span>
+</div>
+<div class="relative h-8 w-full">
+<div class="absolute inset-0 flex text-[10px] font-mono text-text-muted uppercase tracking-wider h-full items-end pb-2">
+<div class="w-[33.33%] border-l border-black pl-2 flex flex-col justify-end">
+<span class="font-bold text-black mb-1">2023</span>
+<div class="flex w-full text-[9px] text-gray-400 font-normal">
+<span class="w-[25%]">Q1</span><span class="w-[25%]">Q2</span><span class="w-[25%]">Q3</span><span class="w-[25%]">Q4</span>
+</div>
+</div>
+<div class="w-[33.33%] border-l border-black pl-2 flex flex-col justify-end">
+<span class="font-bold text-black mb-1">2024</span>
+<div class="flex w-full text-[9px] text-gray-400 font-normal">
+<span class="w-[25%]">Q1</span><span class="w-[25%]">Q2</span><span class="w-[25%]">Q3</span><span class="w-[25%]">Q4</span>
+</div>
+</div>
+<div class="w-[33.33%] border-l border-black pl-2 flex flex-col justify-end">
+<span class="font-bold text-black mb-1">2025</span>
+<div class="flex w-full text-[9px] text-gray-400 font-normal">
+<span class="w-[25%]">Q1</span><span class="w-[25%]">Q2</span><span class="w-[25%]">Q3</span><span class="w-[25%]">Q4</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="p-6 pt-2 space-y-8">
+<div class="relative">
+<h3 class="text-[11px] font-bold text-text-main uppercase tracking-widest mb-1 flex items-center gap-2 sticky left-0 py-2 bg-white z-20 border-b border-gray-100">
+<span class="material-symbols-outlined text-sm text-text-muted">layers</span> Applications
+                    </h3>
+<div class="grid grid-cols-[180px_1fr] gap-0 group hover:bg-gray-50/50 transition-colors border-b border-border-subtle cursor-pointer min-h-[72px]">
+<div class="py-4 border-r border-border-subtle pr-4 flex flex-col justify-center relative">
+<span class="text-xs font-medium text-text-main">Horizontal AI</span>
+<span class="text-[10px] text-text-muted mt-0.5 opacity-60">Assistants, Search</span>
+</div>
+<div class="relative py-4 timeline-cell">
+<div class="timeline-year-line left-[33.33%]"></div>
+<div class="timeline-year-line left-[66.66%]"></div>
+<div class="timeline-grid-line left-[8.33%]"></div>
+<div class="timeline-grid-line left-[16.66%]"></div>
+<div class="timeline-grid-line left-[25%]"></div>
+<div class="timeline-grid-line left-[41.66%]"></div>
+<div class="timeline-grid-line left-[50%]"></div>
+<div class="timeline-grid-line left-[58.33%]"></div>
+<div class="timeline-grid-line left-[75%]"></div>
+<div class="timeline-grid-line left-[83.33%]"></div>
+<div class="timeline-grid-line left-[91.66%]"></div>
+<div class="event-dot dot-md bg-emerald-600 left-[5%]">
+<div class="tooltip"><b>GPT-4</b>OpenAI • Q1 2023<br/>High Impact</div>
+</div>
+<div class="event-dot dot-md bg-slate-700 left-[29%]">
+<div class="tooltip"><b>Gemini 1.0</b>Google • Q4 2023<br/>Medium Impact</div>
+</div>
+<div class="event-dot dot-md bg-indigo-600 left-[37%]">
+<div class="tooltip"><b>Claude 3</b>Anthropic • Q1 2024<br/>Medium Impact</div>
+</div>
+<div class="event-dot dot-lg bg-amber-600 left-[54%]">
+<div class="tooltip"><b>Llama 3.1 405B</b>Meta • Q3 2024<br/>High Impact</div>
+</div>
+<div class="event-dot dot-lg bg-slate-700 left-[70%]">
+<div class="tooltip"><b>Gemini 2.0</b>Google • Q1 2025<br/>High Impact</div>
+</div>
+<div class="event-dot dot-md bg-amber-600 left-[78%]">
+<div class="tooltip"><b>Llama 4</b>Meta • Q2 2025<br/>Medium Impact</div>
+</div>
+<div class="event-dot dot-sm bg-indigo-600 left-[88%]">
+<div class="tooltip"><b>Mistral S-Update</b>Mistral • Q3 2025<br/>Low Impact</div>
+</div>
+</div>
+</div>
+<div class="grid grid-cols-[180px_1fr] gap-0 group hover:bg-gray-50/50 transition-colors border-b border-border-subtle cursor-pointer min-h-[72px]">
+<div class="py-4 border-r border-border-subtle pr-4 flex flex-col justify-center relative">
+<span class="text-xs font-medium text-text-main">Departmental AI</span>
+<span class="text-[10px] text-text-muted mt-0.5 opacity-60">Sales, Dev, Legal</span>
+<div class="absolute right-2 top-2 text-[9px] text-text-muted font-mono opacity-0 group-hover:opacity-100 transition-opacity">
+                                '25 est: $4B
+                            </div>
+</div>
+<div class="relative py-4 timeline-cell">
+<div class="timeline-year-line left-[33.33%]"></div>
+<div class="timeline-year-line left-[66.66%]"></div>
+<div class="timeline-grid-line left-[8.33%]"></div><div class="timeline-grid-line left-[16.66%]"></div><div class="timeline-grid-line left-[25%]"></div>
+<div class="timeline-grid-line left-[41.66%]"></div><div class="timeline-grid-line left-[50%]"></div><div class="timeline-grid-line left-[58.33%]"></div>
+<div class="timeline-grid-line left-[75%]"></div><div class="timeline-grid-line left-[83.33%]"></div><div class="timeline-grid-line left-[91.66%]"></div>
+<div class="event-dot dot-md bg-slate-700 left-[12%]">
+<div class="tooltip"><b>Copilot X</b>GitHub • Q2 2023<br/>Medium Impact</div>
+</div>
+<div class="event-dot dot-sm bg-indigo-600 left-[46%]">
+<div class="tooltip"><b>Harvey Legal OS</b>Harvey • Q2 2024<br/>Low Impact</div>
+</div>
+<div class="event-dot dot-md bg-slate-700 left-[73%]">
+<div class="tooltip"><b>AgentForce</b>Salesforce • Q1 2025<br/>Medium Impact</div>
+</div>
+<div class="event-dot dot-md bg-slate-700 left-[80%]">
+<div class="tooltip"><b>Copilot v2</b>GitHub • Q2 2025<br/>Medium Impact</div>
+</div>
+<div class="event-dot dot-sm bg-indigo-600 left-[86%]">
+<div class="tooltip"><b>Jasper Pivot</b>Jasper • Q3 2025<br/>Low Impact</div>
+</div>
+</div>
+</div>
+<div class="grid grid-cols-[180px_1fr] gap-0 group hover:bg-gray-50/50 transition-colors border-b border-gray-100 cursor-pointer min-h-[72px]">
+<div class="py-4 border-r border-border-subtle pr-4 flex flex-col justify-center relative">
+<span class="text-xs font-medium text-text-main">Vertical AI</span>
+<span class="text-[10px] text-text-muted mt-0.5 opacity-60">Bio, Material, Fin</span>
+</div>
+<div class="relative py-4 timeline-cell">
+<div class="timeline-year-line left-[33.33%]"></div>
+<div class="timeline-year-line left-[66.66%]"></div>
+<div class="timeline-grid-line left-[8.33%]"></div><div class="timeline-grid-line left-[16.66%]"></div><div class="timeline-grid-line left-[25%]"></div>
+<div class="timeline-grid-line left-[41.66%]"></div><div class="timeline-grid-line left-[50%]"></div><div class="timeline-grid-line left-[58.33%]"></div>
+<div class="timeline-grid-line left-[75%]"></div><div class="timeline-grid-line left-[83.33%]"></div><div class="timeline-grid-line left-[91.66%]"></div>
+<div class="event-dot dot-md bg-emerald-600 left-[44%]">
+<div class="tooltip"><b>AlphaFold 3</b>Isomorphic • Q2 2024<br/>Medium Impact</div>
+</div>
+<div class="event-dot dot-lg bg-slate-700 left-[69%]">
+<div class="tooltip"><b>Med-Gemini 2</b>Google • Q1 2025<br/>High Impact</div>
+</div>
+<div class="event-dot dot-sm bg-indigo-600 left-[79%]">
+<div class="tooltip"><b>BioMistral Upd.</b>BioMistral • Q2 2025<br/>Low Impact</div>
+</div>
+</div>
+</div>
+</div>
+<div class="relative">
+<h3 class="text-[11px] font-bold text-text-main uppercase tracking-widest mb-1 flex items-center gap-2 sticky left-0 py-2 bg-white z-20 border-b border-gray-100">
+<span class="material-symbols-outlined text-sm text-text-muted">dns</span> Infrastructure
+                    </h3>
+<div class="grid grid-cols-[180px_1fr] gap-0 group hover:bg-gray-50/50 transition-colors border-b border-border-subtle cursor-pointer min-h-[72px]">
+<div class="py-4 border-r border-border-subtle pr-4 flex flex-col justify-center relative">
+<span class="text-xs font-medium text-text-main">Model APIs</span>
+<span class="text-[10px] text-text-muted mt-0.5 opacity-60">Inference, Fine-tuning</span>
+</div>
+<div class="relative py-4 timeline-cell">
+<div class="timeline-year-line left-[33.33%]"></div>
+<div class="timeline-year-line left-[66.66%]"></div>
+<div class="timeline-grid-line left-[8.33%]"></div><div class="timeline-grid-line left-[16.66%]"></div><div class="timeline-grid-line left-[25%]"></div>
+<div class="timeline-grid-line left-[41.66%]"></div><div class="timeline-grid-line left-[50%]"></div><div class="timeline-grid-line left-[58.33%]"></div>
+<div class="timeline-grid-line left-[75%]"></div><div class="timeline-grid-line left-[83.33%]"></div><div class="timeline-grid-line left-[91.66%]"></div>
+<div class="event-dot dot-md bg-indigo-600 left-[28%]">
+<div class="tooltip"><b>Mistral Large</b>Mistral • Q4 2023<br/>Medium Impact</div>
+</div>
+<div class="event-dot dot-lg bg-emerald-600 left-[72%]">
+<div class="tooltip"><b>GPT-5 Preview</b>OpenAI • Q1 2025<br/>High Impact</div>
+</div>
+<div class="event-dot dot-lg bg-indigo-600 left-[81%]">
+<div class="tooltip"><b>Claude 4 Opus</b>Anthropic • Q2 2025<br/>High Impact</div>
+</div>
+<div class="event-dot dot-md bg-slate-700 left-[86%]">
+<div class="tooltip"><b>Gemini 2.5 API</b>Google • Q3 2025<br/>Medium Impact</div>
+</div>
+</div>
+</div>
+<div class="grid grid-cols-[180px_1fr] gap-0 group hover:bg-gray-50/50 transition-colors border-b border-border-subtle cursor-pointer min-h-[72px]">
+<div class="py-4 border-r border-border-subtle pr-4 flex flex-col justify-center relative">
+<span class="text-xs font-medium text-text-main">Training &amp; Compute</span>
+<span class="text-[10px] text-text-muted mt-0.5 opacity-60">GPUs, Custom Silicon</span>
+<div class="absolute right-2 top-2 text-[9px] text-text-muted font-mono opacity-0 group-hover:opacity-100 transition-opacity">
+                                '25 est: $60B
+                            </div>
+</div>
+<div class="relative py-4 timeline-cell">
+<div class="timeline-year-line left-[33.33%]"></div>
+<div class="timeline-year-line left-[66.66%]"></div>
+<div class="timeline-grid-line left-[8.33%]"></div><div class="timeline-grid-line left-[16.66%]"></div><div class="timeline-grid-line left-[25%]"></div>
+<div class="timeline-grid-line left-[41.66%]"></div><div class="timeline-grid-line left-[50%]"></div><div class="timeline-grid-line left-[58.33%]"></div>
+<div class="timeline-grid-line left-[75%]"></div><div class="timeline-grid-line left-[83.33%]"></div><div class="timeline-grid-line left-[91.66%]"></div>
+<div class="event-dot dot-lg bg-slate-700 left-[14%]">
+<div class="tooltip"><b>H100 Shipping</b>NVIDIA • Q2 2023<br/>High Impact</div>
+</div>
+<div class="event-dot dot-md bg-indigo-600 left-[53%]">
+<div class="tooltip"><b>Groq Scale</b>Groq • Q3 2024<br/>Medium Impact</div>
+</div>
+<div class="event-dot dot-lg bg-slate-700 left-[70%]">
+<div class="tooltip"><b>Blackwell Ship</b>NVIDIA • Q1 2025<br/>High Impact</div>
+</div>
+<div class="event-dot dot-md bg-emerald-600 left-[87%]">
+<div class="tooltip"><b>TPU v6 Pods</b>Google DeepMind • Q3 2025<br/>Medium Impact</div>
+</div>
+</div>
+</div>
+<div class="grid grid-cols-[180px_1fr] gap-0 group hover:bg-gray-50/50 transition-colors border-b border-dashed border-gray-200 cursor-pointer min-h-[72px]">
+<div class="py-4 border-r border-border-subtle pr-4 flex flex-col justify-center relative">
+<span class="text-xs font-medium text-text-main">Data / Orch. / Obs.</span>
+<span class="text-[10px] text-text-muted mt-0.5 opacity-60">Vector DBs, Eval</span>
+</div>
+<div class="relative py-4 timeline-cell">
+<div class="timeline-year-line left-[33.33%]"></div>
+<div class="timeline-year-line left-[66.66%]"></div>
+<div class="timeline-grid-line left-[8.33%]"></div><div class="timeline-grid-line left-[16.66%]"></div><div class="timeline-grid-line left-[25%]"></div>
+<div class="timeline-grid-line left-[41.66%]"></div><div class="timeline-grid-line left-[50%]"></div><div class="timeline-grid-line left-[58.33%]"></div>
+<div class="timeline-grid-line left-[75%]"></div><div class="timeline-grid-line left-[83.33%]"></div><div class="timeline-grid-line left-[91.66%]"></div>
+<div class="event-dot dot-md bg-indigo-600 left-[45%]">
+<div class="tooltip"><b>LangChain 1.0</b>LangChain • Q2 2024<br/>Medium Impact</div>
+</div>
+<div class="event-dot dot-md bg-slate-700 left-[72%]">
+<div class="tooltip"><b>Mosaic 2.0</b>Databricks • Q1 2025<br/>Medium Impact</div>
+</div>
+<div class="event-dot dot-sm bg-indigo-600 left-[78%]">
+<div class="tooltip"><b>LlamaIndex 2.0</b>LlamaIndex • Q2 2025<br/>Low Impact</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="mt-auto border-t border-black p-8 bg-gray-50/80">
+<div class="flex items-center justify-between mb-6">
+<h3 class="text-sm font-display font-medium text-text-main flex items-center gap-2">
+<span class="material-symbols-outlined text-sm text-indigo-600">auto_awesome</span>
+                        Strategic Patterns &amp; Derived Insights
+                        <span class="text-text-muted font-normal ml-3 text-xs bg-white border border-gray-200 px-2 py-0.5 rounded-full">Explore Overlay Mode</span>
+</h3>
+<span class="text-[10px] uppercase tracking-wider text-text-muted cursor-pointer hover:text-black hover:underline">View All Patterns</span>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+<div class="bg-white border border-black p-5 relative group cursor-pointer shadow-soft flex flex-col h-full ring-1 ring-black/5 hover:shadow-lg transition-shadow">
+<div class="absolute top-0 left-0 w-1 h-full bg-indigo-600"></div>
+<div class="flex justify-between items-start mb-3">
+<span class="text-[10px] font-bold uppercase tracking-widest text-indigo-600">Consolidation Motif</span>
+<span class="material-symbols-outlined text-sm text-text-muted group-hover:text-black">filter_center_focus</span>
+</div>
+<h4 class="text-sm font-semibold text-text-main mb-2 leading-snug">Model API Consolidation</h4>
+<p class="text-xs text-text-muted leading-relaxed mb-4 flex-1">
+                            Independent inference providers saw a 40% reduction in share as foundational labs verticalized serving stacks in early 2025.
+                        </p>
+<div class="flex items-center gap-2 mt-auto">
+<div class="flex -space-x-1">
+<span class="w-4 h-4 rounded-full bg-emerald-600 border border-white"></span>
+<span class="w-4 h-4 rounded-full bg-indigo-600 border border-white"></span>
+</div>
+<span class="text-[10px] font-medium text-text-main ml-1 underline decoration-dotted">Show 3 matching events</span>
+</div>
+</div>
+<div class="bg-white border border-border-subtle p-5 hover:border-gray-400 transition-colors group cursor-pointer shadow-soft flex flex-col h-full opacity-100">
+<div class="flex justify-between items-start mb-3">
+<span class="text-[10px] font-bold uppercase tracking-widest text-text-muted">Strategic Pivot</span>
+</div>
+<h4 class="text-sm font-semibold text-text-main mb-2 leading-snug">The "Agentic" Shift</h4>
+<p class="text-xs text-text-muted leading-relaxed mb-4 flex-1">
+                            Infrastructure providers (OpenAI, Anthropic) moved up-stack to offer orchestration layers, creating conflict with middleware startups.
+                        </p>
+<span class="text-[10px] font-medium text-text-muted group-hover:text-black">Show 7 related events</span>
+</div>
+<div class="bg-white border border-border-subtle p-5 hover:border-gray-400 transition-colors group cursor-pointer shadow-soft flex flex-col h-full opacity-100">
+<div class="flex justify-between items-start mb-3">
+<span class="text-[10px] font-bold uppercase tracking-widest text-text-muted">Tech Stack</span>
+</div>
+<h4 class="text-sm font-semibold text-text-main mb-2 leading-snug">Reasoning over Retrieval</h4>
+<p class="text-xs text-text-muted leading-relaxed mb-4 flex-1">
+                            Context window wars ceased as 'Chain of Thought' became the primary differentiator for complex enterprise tasks.
+                        </p>
+<span class="text-[10px] font-medium text-text-muted group-hover:text-black">Show 4 related events</span>
+</div>
+</div>
+</div>
+</div>
+</main>
+<aside class="bg-white border-l border-border-subtle flex flex-col w-full md:w-[380px] lg:w-[420px] h-full shadow-soft z-50 overflow-hidden absolute right-0 top-0 translate-x-full transition-transform duration-300" id="details-drawer">
+<button class="absolute top-4 right-4 z-50 bg-white rounded-full p-2 shadow-md hover:bg-gray-100">
+<span class="material-symbols-outlined text-lg">close</span>
+</button>
+<div class="p-6 border-b border-border-subtle bg-white sticky top-0 z-10">
+<div class="flex items-center justify-between mb-4">
+<div class="flex items-center gap-2">
+<span class="w-2.5 h-2.5 bg-emerald-600 rounded-full ring-2 ring-white shadow-sm"></span>
+<span class="text-[10px] font-bold text-text-muted uppercase tracking-widest">Selected Event</span>
+</div>
+<div class="flex gap-2 mr-8">
+<button class="text-text-muted hover:text-black transition-colors">
+<span class="material-symbols-outlined text-lg">share</span>
+</button>
+</div>
+</div>
+<h2 class="text-xl font-display font-semibold text-text-main mb-1 leading-snug">GPT-5 Preview Launch</h2>
+<div class="flex items-center gap-2 mb-4">
+<span class="text-sm text-text-main font-medium">OpenAI</span>
+<span class="text-text-muted text-xs">•</span>
+<span class="text-sm text-text-muted">Q1 2025</span>
+</div>
+<div class="flex flex-wrap gap-2">
+<span class="px-2 py-0.5 bg-gray-100 border border-gray-200 rounded text-[10px] font-medium text-text-muted uppercase tracking-wider">Model APIs</span>
+<span class="px-2 py-0.5 bg-gray-100 border border-gray-200 rounded text-[10px] font-medium text-text-muted uppercase tracking-wider">Launch</span>
+<span class="px-2 py-0.5 bg-emerald-50 border border-emerald-100 rounded text-[10px] font-medium text-emerald-700 uppercase tracking-wider">Frontier Lab</span>
+</div>
+</div>
+<div class="flex-1 overflow-y-auto p-6 bg-gray-50/30">
+<div class="space-y-8">
+<div>
+<h4 class="text-[10px] font-bold text-text-muted uppercase tracking-widest mb-2">Event Description</h4>
+<p class="text-sm text-text-main leading-relaxed">
+                        Demonstration of next-generation reasoning capabilities including multi-step planning and self-correction. Confirmed departure from pure next-token prediction towards "Chain of Thought" native architectures.
+                    </p>
+</div>
+<div>
+<h4 class="text-[10px] font-bold text-text-muted uppercase tracking-widest mb-2 text-indigo-700">Strategic Significance</h4>
+<p class="text-sm text-text-main leading-relaxed pl-3 border-l-2 border-indigo-600">
+                        This release marks the "reasoning era" of LLMs. By integrating search and code execution natively, OpenAI is attempting to bypass the agentic middleware layer that startups (LangChain, etc.) had been building, effectively capturing the value of orchestration.
+                    </p>
+</div>
+<div>
+<h4 class="text-[10px] font-bold text-text-muted uppercase tracking-widest mb-3">Evidence Sources</h4>
+<ul class="space-y-2">
+<li>
+<a class="flex items-center justify-between p-2.5 bg-white border border-gray-200 hover:border-gray-400 transition-colors group rounded-sm" href="#">
+<div class="flex flex-col">
+<span class="text-xs font-medium text-blue-600 group-hover:underline">OpenAI Research Blog</span>
+<span class="text-[10px] text-text-muted">Official Announcement • Jan 15, 2025</span>
+</div>
+<span class="material-symbols-outlined text-sm text-gray-400">open_in_new</span>
+</a>
+</li>
+</ul>
+</div>
+<div>
+<h4 class="text-[10px] font-bold text-text-muted uppercase tracking-widest mb-4">Related Motif Sequence</h4>
+<div class="relative border-l border-gray-200 ml-1.5 space-y-0 pb-2">
+<div class="relative pl-6 pb-6 group cursor-pointer">
+<div class="absolute -left-[5px] top-1 h-2.5 w-2.5 rounded-full bg-slate-700 border border-white z-10"></div>
+<div class="flex flex-col gap-0.5 opacity-60 group-hover:opacity-100 transition-opacity">
+<span class="text-[10px] font-mono text-text-muted">Q4 2024</span>
+<h5 class="text-xs font-semibold text-text-main">Google Gemini 1.5 Ultra</h5>
+<p class="text-[10px] text-text-muted truncate">Early reasoning capabilities demoed.</p>
+</div>
+</div>
+<div class="relative pl-6 pb-6">
+<div class="absolute -left-[6px] top-1 h-3 w-3 rounded-full bg-emerald-600 border-2 border-white ring-1 ring-emerald-200 z-20"></div>
+<div class="flex flex-col gap-0.5">
+<span class="text-[10px] font-mono text-black font-bold">Q1 2025</span>
+<h5 class="text-xs font-bold text-black">GPT-5 Preview Launch</h5>
+<p class="text-[10px] text-text-muted">Current selection.</p>
+</div>
+</div>
+<div class="relative pl-6 group cursor-pointer">
+<div class="absolute -left-[5px] top-1 h-2.5 w-2.5 rounded-full bg-indigo-600 border border-white z-10"></div>
+<div class="flex flex-col gap-0.5 opacity-60 group-hover:opacity-100 transition-opacity">
+<span class="text-[10px] font-mono text-text-muted">Q1 2025 (Rumor)</span>
+<h5 class="text-xs font-semibold text-text-main">Anthropic Claude 4 Opus</h5>
+<p class="text-[10px] text-text-muted truncate">Expected counter-release.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</aside>
+</div>
+
+</body></html>
