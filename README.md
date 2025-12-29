@@ -2,6 +2,8 @@
 
 A strategic intelligence platform for understanding AI ecosystem evolution across stack layers and time (2023-2025).
 
+![AI Strategic Actions Atlas Interface](ui/reference_screen.png)
+
 ## Overview
 
 This is not another market map or news aggregator. It is a system for mapping strategic actions (launches, acquisitions, investments) across a defined AI stack, deriving strategic patterns from empirical evidence, and providing time-aware context for ecosystem evolution.

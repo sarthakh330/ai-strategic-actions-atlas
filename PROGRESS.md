@@ -34,49 +34,68 @@
 ## 🚧 Phase 2: UI Implementation (IN PROGRESS)
 
 **Started:** 2025-12-28
-**Current Phase:** 2.1 - Core Grid + Tooltips
+**Current Phase:** 2.2 - Event Detail Drawer
+**GitHub Repository:** https://github.com/sarthakh330/ai-strategic-actions-atlas
 
 ### Phase 2.1: Project Setup & Core Grid ✅
 
-**Status:** Complete
-**Time:** ~30 minutes
+**Status:** Complete - Pushed to GitHub
+**Time:** ~45 minutes
 
 #### Completed
 - ✅ React + Vite project initialized
-- ✅ Tailwind CSS configured with custom colors (entity classes)
+- ✅ Tailwind CSS configured with custom colors and Space Grotesk/Inter fonts
 - ✅ Data loading hook created (`useData.js`)
-- ✅ Core components built:
-  - `App.jsx` - Main application with header, legend, loading states
-  - `TimelineGrid.jsx` - Stack × Time grid (6 layers × 12 quarters)
-  - `EventDot.jsx` - Individual event dots (sized by impact, colored by entity class)
+- ✅ Core components built and redesigned:
+  - `App.jsx` - Clean header with top navigation, filters, pattern cards section
+  - `TimelineGrid.jsx` - Minimal Stack × Time grid with "STACK ROW" label, subtle borders
+  - `EventDot.jsx` - Clean circular dots (no emoji icons), confidence via border style
   - `Tooltip.jsx` - Hover tooltip with event details
 - ✅ Data symlinked to /public for dev server access
-- ✅ Dev server running at http://localhost:5173/
+- ✅ Dev server running at http://localhost:5174/
+- ✅ UI redesigned to match reference design (minimal, professional aesthetic)
+- ✅ Repository created and pushed to GitHub
 
 #### Features Implemented
-1. **Grid Layout**
-   - 180px fixed layer labels
-   - 12 quarters (Q1 2023 - Q4 2025)
-   - 6 stack layers with examples
-   - Sticky headers (years + quarters)
-   - Horizontal scroll for timeline
+1. **Clean Header & Navigation**
+   - Compact title: "AI Strategic Actions Atlas" with subtitle
+   - Top navigation with Entity Class, Impact, and Action Type filters (visual only)
+   - Inline legend showing entity classes (Big Tech, Startup, Frontier Lab, Open Source)
+   - Show Spend toggle switch
 
-2. **Event Dots**
+2. **Minimal Grid Layout**
+   - 180px fixed layer labels with "STACK ROW" header
+   - 12 quarters (Q1 2023 - Q4 2025) with year/quarter headers
+   - 6 stack layers grouped as Applications and Infrastructure
+   - Subtle borders and dashed quarter dividers
+   - Section headers with icons
+   - Hover state on rows (subtle gray background)
+
+3. **Event Dots**
+   - Clean circular dots (no emoji icons)
    - Positioned by date within quarter
    - Sized by impact (8px/12px/18px for low/medium/high)
    - Colored by entity class (from canonical data)
+   - Border style encodes confidence (solid/dashed/dotted)
    - Vertical jitter to prevent overlap
-   - Hover state with scale animation
+   - Hover state with scale animation and shadow
 
-3. **Hover Tooltips**
-   - Dark background with arrow pointer
+4. **Hover Tooltips**
    - Shows: Title, Entity, Date, Impact level
    - Positioned above dot
    - Disappears on mouse leave
 
-4. **Legend**
-   - Entity classes with color dots
-   - Event/pattern count display
+5. **Pattern Cards Section**
+   - 3 pattern cards at bottom with visual hierarchy
+   - Cards show pattern type, title, description, event count
+   - "Show N matching events" interaction (not yet functional)
+   - Hover states and visual feedback
+
+6. **Design System**
+   - Space Grotesk font for headings
+   - Inter font for body text
+   - Entity class colors from canonical data
+   - Minimal aesthetic matching reference design
 
 ---
 
