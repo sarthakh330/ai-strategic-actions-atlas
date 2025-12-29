@@ -26,6 +26,25 @@ function App() {
     }
   }, [entityClasses, actionTypes, selectedEntityClasses.length, selectedActionTypes.length]);
 
+  // ESC key support: Close drawer and clear highlights
+  useEffect(() => {
+    const handleEscKey = (event) => {
+      if (event.key === 'Escape') {
+        // Close event drawer if open
+        if (selectedEvent) {
+          setSelectedEvent(null);
+        }
+        // Clear pattern highlights if active
+        else if (highlightedPattern) {
+          setHighlightedPattern(null);
+        }
+      }
+    };
+
+    window.addEventListener('keydown', handleEscKey);
+    return () => window.removeEventListener('keydown', handleEscKey);
+  }, [selectedEvent, highlightedPattern]);
+
   // Filter events based on active filters
   const filteredEvents = useMemo(() => {
     if (!events.length) return [];
