@@ -4,6 +4,7 @@ import TimelineGrid from './components/TimelineGrid';
 import RightPanel from './components/RightPanel';
 import EventDrawer from './components/EventDrawer';
 import FilterDropdown from './components/FilterDropdown';
+import DataTables from './components/DataTables';
 
 function App() {
   const { events, patterns, entities, stackLayers, actionTypes, entityClasses,
@@ -377,6 +378,16 @@ function App() {
           </div>
         </div>
       </div>
+
+      {/* Data Quality & Transparency Section */}
+      <DataTables
+        events={filteredEvents}
+        patterns={patterns}
+        entities={entities}
+        entityMap={entityMap}
+        entityClassMap={entityClassMap}
+        stackLayers={stackLayers}
+      />
     </div>
   );
 }

@@ -363,6 +363,33 @@
 
 ---
 
+### Phase 3.1: Third-Party Audit + Data Tables (✅ COMPLETE)
+
+**Completed:** 2025-12-29
+**Time Invested:** ~2 hours
+**Commit:** [pending]
+
+**Goal:** Add transparency layer with independent audit + browsable data tables
+
+#### Implemented Features
+1. **Third-Party Audit Report** (docs/THIRD_PARTY_AUDIT.md)
+   - ✅ Overall Grade: C+ (6.2/10) - "Solid foundation but needs substantial refinement"
+   - ✅ 6-dimension scored assessment: Event Coverage (6/10), Framework Design (7/10), Entity Classification (5/10), Pattern Quality (7/10), Data Rigor (5/10), Strategic Value (7/10)
+   - ✅ Identified 5 critical gaps: Geographic bias (95% US-focused), Infrastructure under-coverage, Financial data weakness, Missing modalities, No regulatory coverage
+   - ✅ Listed 45 missing events across 3 priority tiers
+   - ✅ 7-phase v2 roadmap with timelines (4-6 weeks to 4-6 months)
+
+2. **Filterable Data Tables UI Section** (app/src/components/DataTables.jsx)
+   - ✅ Collapsible section at bottom of page with grade badge visible when collapsed
+   - ✅ 3 tabs: Events table, Patterns table, Audit Report summary
+   - ✅ Events Table: 46 rows, sortable by Date/Event/Entity/Impact/Stack Layer, searchable
+   - ✅ Patterns Table: 5 rows, sortable by Pattern/Thesis/Confidence/Events count, searchable
+   - ✅ Audit Report tab: Executive summary with scores, key findings, recommendations, link to full report
+   - ✅ Matches existing design system (gray-50 backgrounds, border-subtle, text-main/text-muted, Space Grotesk/Inter typography)
+   - ✅ Visual features: color-coded entity badges, impact pills (high=red, medium=yellow, low=gray), sortable columns with ↑↓ indicators
+
+---
+
 ### Phase 2.6: Polish & Deploy - PLANNED
 - Responsive design (desktop/laptop optimized)
 - Performance testing (<3s load)

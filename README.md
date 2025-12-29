@@ -43,6 +43,13 @@ The primary organizing axis is stack layers (vertical) by time (horizontal: 2023
 - "Clear highlights" button to return to normal view
 - Explore correlations between patterns and events visually
 
+**Data Quality & Transparency**
+- Independent third-party audit report (Grade: C+ 6.2/10)
+- Collapsible transparency section at bottom of page
+- Browsable data tables: Events (46 rows) and Patterns (5 rows)
+- Sortable columns with search/filter functionality
+- Critical assessment of coverage gaps, biases, and improvement recommendations
+
 ## Tech Stack
 
 - **Frontend:** React + Vite + Tailwind CSS
@@ -146,7 +153,8 @@ All patterns include hypothesis language, supporting events, counter-signals, an
 **Phase 2.3: Complete** - Functional filters (entity class, impact, action type) with multi-select dropdowns
 **Phase 2.4: Complete** - Pattern overlay mode (highlight matching events, explore mode)
 **Phase 2.5: Complete** - Performance optimizations (lookup Maps, localStorage caching, error boundaries)
-**Phase 3: In Progress** - Data quality improvements (2 cycles complete: 46 events, Level 4 quantified facts added)
+**Phase 3.1: Complete** - Third-party audit + data transparency (C+ grade, browsable tables, critical gap analysis)
+**Phase 3.2: In Progress** - Data quality improvements (2 cycles complete: 46 events, Level 4 quantified facts added)
 
 Upcoming: Continue 5-minute data improvement cycles, accessibility improvements, production deployment
 
@@ -179,6 +187,7 @@ Upcoming: Continue 5-minute data improvement cycles, accessibility improvements,
 - [DATA_MODEL_DRAFT.yaml](docs/DATA_MODEL_DRAFT.yaml) - Entity schemas and relationships
 - [SOURCES.md](docs/SOURCES.md) - Evidence quality standards
 - [EVAL_RUBRIC.md](docs/EVAL_RUBRIC.md) - Quality assessment framework
+- [THIRD_PARTY_AUDIT.md](docs/THIRD_PARTY_AUDIT.md) - Independent audit report (Grade: C+ 6.2/10)
 - [DATA_QUALITY_IMPROVEMENT.md](docs/DATA_QUALITY_IMPROVEMENT.md) - Epistemic upgrade methodology
 - [RESEARCH_BACKLOG.md](research/RESEARCH_BACKLOG.md) - Pending data improvements tracking
 
