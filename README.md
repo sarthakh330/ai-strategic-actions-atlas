@@ -15,7 +15,7 @@ The primary organizing axis is stack layers (vertical) by time (horizontal: 2023
 ## Key Features
 
 **Evidence-Based Analysis**
-- 42 validated strategic events across 6 stack layers
+- 46 validated strategic events across 6 stack layers (2023-2025)
 - All events backed by credible primary sources
 - Three-layer epistemic discipline: Evidence, Market Reality, Interpretation
 
@@ -69,7 +69,7 @@ Dev server runs at http://localhost:5174/
 node scripts/validate_data.js
 ```
 
-Expected output: All validation checks passed (42 events, 5 patterns validated)
+Expected output: All validation checks passed (46 events, 5 patterns validated)
 
 ## Project Structure
 
@@ -84,7 +84,7 @@ Expected output: All validation checks passed (42 events, 5 patterns validated)
 │
 ├── data/                   # Golden dataset
 │   ├── canonical/         # Reference data (entities, stack layers, etc.)
-│   ├── events/            # 42 strategic events (JSONL)
+│   ├── events/            # 46 strategic events (JSONL)
 │   └── patterns/          # 5 strategic patterns (JSONL)
 │
 ├── docs/                   # Documentation
@@ -124,10 +124,10 @@ Three layers, never mixed:
 
 ## The Dataset
 
-**42 Strategic Events**
+**46 Strategic Events**
 - Coverage: All 6 stack layers, 4 entity classes, 2023-2025 timespan
-- Evidence quality: All events have credible sources (27 high-quality, 15 acceptable)
-- Key events include: GPT-4 Launch, Claude Sonnet 3.5, Cursor $200M ARR, Databricks/MosaicML acquisition
+- Evidence quality: All events have credible sources, including Level 4 quantified facts
+- Key events include: GPT-4 Launch (92% Fortune 500 adoption), GitHub Copilot (1M+ paid users), DeepSeek-R1 ($6M training cost), Cursor $200M ARR, Databricks/MosaicML acquisition
 
 **5 Strategic Patterns**
 - Model API Consolidation (Medium confidence)
@@ -145,9 +145,10 @@ All patterns include hypothesis language, supporting events, counter-signals, an
 **Phase 2.2: Complete** - Right panel with event detail drawer, click interactions, slide-in animations
 **Phase 2.3: Complete** - Functional filters (entity class, impact, action type) with multi-select dropdowns
 **Phase 2.4: Complete** - Pattern overlay mode (highlight matching events, explore mode)
-**Phase 2.5: In Progress** - Polish, accessibility, deployment preparation
+**Phase 2.5: Complete** - Performance optimizations (lookup Maps, localStorage caching, error boundaries)
+**Phase 3: In Progress** - Data quality improvements (2 cycles complete: 46 events, Level 4 quantified facts added)
 
-Upcoming: Performance testing, accessibility improvements, production deployment
+Upcoming: Continue 5-minute data improvement cycles, accessibility improvements, production deployment
 
 ## Contributing
 
@@ -178,6 +179,8 @@ Upcoming: Performance testing, accessibility improvements, production deployment
 - [DATA_MODEL_DRAFT.yaml](docs/DATA_MODEL_DRAFT.yaml) - Entity schemas and relationships
 - [SOURCES.md](docs/SOURCES.md) - Evidence quality standards
 - [EVAL_RUBRIC.md](docs/EVAL_RUBRIC.md) - Quality assessment framework
+- [DATA_QUALITY_IMPROVEMENT.md](docs/DATA_QUALITY_IMPROVEMENT.md) - Epistemic upgrade methodology
+- [RESEARCH_BACKLOG.md](research/RESEARCH_BACKLOG.md) - Pending data improvements tracking
 
 **Implementation:**
 - [NEXT_STEPS_UI.md](docs/NEXT_STEPS_UI.md) - UI roadmap
