@@ -10,6 +10,7 @@ export default function EventDot({
   totalInCell,
   quarterIndex,
   color,
+  onClick,
   onMouseEnter,
   onMouseLeave,
 }) {
@@ -48,6 +49,7 @@ export default function EventDot({
         border: `2px ${borderStyle} ${color}`,
         zIndex: 10,
       }}
+      onClick={onClick}
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}
       title={event.title}

@@ -1,10 +1,13 @@
 import { useState } from 'react';
 import { useData } from './hooks/useData';
 import TimelineGrid from './components/TimelineGrid';
+import RightPanel from './components/RightPanel';
+import EventDrawer from './components/EventDrawer';
 
 function App() {
   const { events, patterns, entities, stackLayers, actionTypes, entityClasses, loading, error } = useData();
   const [showSpend, setShowSpend] = useState(false);
+  const [selectedEvent, setSelectedEvent] = useState(null);
 
   if (loading) {
     return (
@@ -115,15 +118,37 @@ function App() {
         </div>
       </header>
 
-      {/* Main Timeline */}
-      <main className="flex-1 overflow-auto bg-white">
-        <TimelineGrid
-          events={events}
-          stackLayers={stackLayers}
-          entityClasses={entityClasses}
-          entities={entities}
-          showSpend={showSpend}
-        />
+      {/* Main Timeline with Right Panel */}
+      <main className="flex-1 overflow-hidden bg-white flex">
+        {/* Timeline Grid - scrollable */}
+        <div className="flex-1 overflow-auto">
+          <TimelineGrid
+            events={events}
+            stackLayers={stackLayers}
+            entityClasses={entityClasses}
+            entities={entities}
+            showSpend={showSpend}
+            onEventClick={setSelectedEvent}
+          />
+        </div>
+
+        {/* Right Panel - fixed width */}
+        {selectedEvent ? (
+          <EventDrawer
+            event={selectedEvent}
+            onClose={() => setSelectedEvent(null)}
+            entities={entities}
+            entityClasses={entityClasses}
+            actionTypes={actionTypes}
+            events={events}
+          />
+        ) : (
+          <RightPanel
+            events={events}
+            patterns={patterns}
+            entityClasses={entityClasses}
+          />
+        )}
       </main>
 
       {/* Strategic Patterns Section */}

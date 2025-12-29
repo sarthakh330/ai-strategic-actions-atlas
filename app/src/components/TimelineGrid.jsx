@@ -6,7 +6,7 @@ import Tooltip from './Tooltip';
  * Main timeline grid component
  * Renders Stack × Time grid with event dots
  */
-export default function TimelineGrid({ events, stackLayers, entityClasses, entities, showSpend }) {
+export default function TimelineGrid({ events, stackLayers, entityClasses, entities, showSpend, onEventClick }) {
   const [hoveredEvent, setHoveredEvent] = useState(null);
   const [hoveredPosition, setHoveredPosition] = useState({ x: 0, y: 0 });
 
@@ -149,6 +149,7 @@ export default function TimelineGrid({ events, stackLayers, entityClasses, entit
                           totalInCell={eventsByLayerQuarter[layer.id][qIdx].length}
                           quarterIndex={qIdx}
                           color={entityClass?.color || '#6b7280'}
+                          onClick={() => onEventClick && onEventClick(event)}
                           onMouseEnter={(e) => {
                             setHoveredEvent(event);
                             const rect = e.currentTarget.getBoundingClientRect();
@@ -225,6 +226,7 @@ export default function TimelineGrid({ events, stackLayers, entityClasses, entit
                           totalInCell={eventsByLayerQuarter[layer.id][qIdx].length}
                           quarterIndex={qIdx}
                           color={entityClass?.color || '#6b7280'}
+                          onClick={() => onEventClick && onEventClick(event)}
                           onMouseEnter={(e) => {
                             setHoveredEvent(event);
                             const rect = e.currentTarget.getBoundingClientRect();
