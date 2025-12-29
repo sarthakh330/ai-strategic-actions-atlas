@@ -6,9 +6,12 @@ import Tooltip from './Tooltip';
  * Main timeline grid component
  * Renders Stack × Time grid with event dots
  */
-export default function TimelineGrid({ events, stackLayers, entityClasses, entities, showSpend, onEventClick }) {
+export default function TimelineGrid({ events, stackLayers, entityClasses, entities, showSpend, onEventClick, highlightedPattern }) {
   const [hoveredEvent, setHoveredEvent] = useState(null);
   const [hoveredPosition, setHoveredPosition] = useState({ x: 0, y: 0 });
+
+  // Get set of event IDs that should be highlighted
+  const highlightedEventIds = highlightedPattern ? new Set(highlightedPattern.supporting_events) : null;
 
   // Generate quarters for 2023-2025
   const quarters = [];
@@ -159,6 +162,8 @@ export default function TimelineGrid({ events, stackLayers, entityClasses, entit
                             });
                           }}
                           onMouseLeave={() => setHoveredEvent(null)}
+                          isHighlighted={highlightedEventIds ? highlightedEventIds.has(event.id) : false}
+                          isDimmed={highlightedEventIds ? !highlightedEventIds.has(event.id) : false}
                         />
                       );
                     })}
@@ -236,6 +241,8 @@ export default function TimelineGrid({ events, stackLayers, entityClasses, entit
                             });
                           }}
                           onMouseLeave={() => setHoveredEvent(null)}
+                          isHighlighted={highlightedEventIds ? highlightedEventIds.has(event.id) : false}
+                          isDimmed={highlightedEventIds ? !highlightedEventIds.has(event.id) : false}
                         />
                       );
                     })}

@@ -13,6 +13,8 @@ export default function EventDot({
   onClick,
   onMouseEnter,
   onMouseLeave,
+  isHighlighted = false,
+  isDimmed = false,
 }) {
   // Dot size based on impact level
   const sizeMap = {
@@ -35,6 +37,14 @@ export default function EventDot({
   const borderStyle = event.confidence === 'confirmed' ? 'solid' :
                       event.confidence === 'likely' ? 'dashed' : 'dotted';
 
+  // Calculate styles based on highlighting state
+  const baseScale = isHighlighted ? 1.2 : 1;
+  const opacity = isDimmed ? 0.3 : 1;
+  const baseBoxShadow = isHighlighted
+    ? '0 0 0 3px rgba(239, 68, 68, 0.3), 0 0 0 1px #fff, 0 2px 8px rgba(0,0,0,0.15)'
+    : '0 0 0 1px #fff, 0 1px 2px rgba(0,0,0,0.1)';
+  const zIndex = isHighlighted ? 20 : 10;
+
   return (
     <div
       className="absolute rounded-full cursor-pointer transition-all duration-200 hover:z-50"
@@ -44,22 +54,26 @@ export default function EventDot({
         backgroundColor: color,
         left: `${horizontalPercent}%`,
         top: `${verticalOffset}%`,
-        transform: 'translate(-50%, -50%) scale(1)',
-        boxShadow: '0 0 0 1px #fff, 0 1px 2px rgba(0,0,0,0.1)',
+        transform: `translate(-50%, -50%) scale(${baseScale})`,
+        boxShadow: baseBoxShadow,
         border: `2px ${borderStyle} ${color}`,
-        zIndex: 10,
+        opacity: opacity,
+        zIndex: zIndex,
       }}
       onClick={onClick}
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}
       title={event.title}
       onMouseOver={(e) => {
-        e.currentTarget.style.transform = 'translate(-50%, -50%) scale(1.2)';
-        e.currentTarget.style.boxShadow = '0 0 0 2px #fff, 0 4px 12px rgba(0,0,0,0.2)';
+        const hoverScale = isHighlighted ? 1.3 : 1.2;
+        e.currentTarget.style.transform = `translate(-50%, -50%) scale(${hoverScale})`;
+        e.currentTarget.style.boxShadow = isHighlighted
+          ? '0 0 0 4px rgba(239, 68, 68, 0.4), 0 0 0 1px #fff, 0 4px 12px rgba(0,0,0,0.25)'
+          : '0 0 0 2px #fff, 0 4px 12px rgba(0,0,0,0.2)';
       }}
       onMouseOut={(e) => {
-        e.currentTarget.style.transform = 'translate(-50%, -50%) scale(1)';
-        e.currentTarget.style.boxShadow = '0 0 0 1px #fff, 0 1px 2px rgba(0,0,0,0.1)';
+        e.currentTarget.style.transform = `translate(-50%, -50%) scale(${baseScale})`;
+        e.currentTarget.style.boxShadow = baseBoxShadow;
       }}
     />
   );

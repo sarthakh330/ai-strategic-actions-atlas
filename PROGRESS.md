@@ -34,7 +34,7 @@
 ## 🚧 Phase 2: UI Implementation (IN PROGRESS)
 
 **Started:** 2025-12-28
-**Current Phase:** 2.2 - Event Detail Drawer
+**Current Phase:** 2.5 - Polish & Deploy
 **GitHub Repository:** https://github.com/sarthakh330/ai-strategic-actions-atlas
 
 ### Phase 2.1: Project Setup & Core Grid ✅
@@ -99,38 +99,148 @@
 
 ---
 
+### Phase 2.2: Right Panel with Event Drawer ✅
+
+**Status:** Complete - Pushed to GitHub
+**Time:** ~30 minutes
+
+#### Completed
+- ✅ RightPanel component created (default state with overview)
+- ✅ EventDrawer component created (slides in on event click)
+- ✅ App.jsx updated with flexbox layout (timeline + right panel)
+- ✅ Click handlers added to EventDot components
+- ✅ State management for selectedEvent in App.jsx
+- ✅ Slide-in animation (CSS @keyframes) added to index.css
+- ✅ Tested and verified in browser
+
+#### Features Implemented
+1. **Right Panel Layout**
+   - Fixed 320px width panel on right side
+   - Flexbox layout with scrollable timeline (flex-1) and fixed panel (flex-shrink-0)
+   - Clean visual separation with subtle border
+
+2. **RightPanel Component (Default State)**
+   - Atlas Overview header with instructional text
+   - Dataset Summary metrics (total events, patterns, time range, stack layers)
+   - Visual Encoding Legend:
+     - Color = Entity Class (with colored dots)
+     - Size = Impact Level (three dot sizes)
+     - Border = Confidence (solid/dashed/dotted)
+   - Recent Events list (last 3 events)
+
+3. **EventDrawer Component (Click State)**
+   - Slides in from right with smooth animation (0.3s ease-out)
+   - Sticky header with entity badge, close button (X icon)
+   - Event Metadata section: date, action type, impact level, confidence, stack layers
+   - Description section with full event description
+   - Strategic Significance section (visually distinguished with gray background)
+   - Evidence Sources with clickable external links
+   - Related Events (same entity or action type, up to 3 events)
+   - Tags section
+   - Scrollable content for long events
+
+4. **Interaction Flow**
+   - Click any event dot → EventDrawer slides in, replacing RightPanel
+   - Close button or clicking elsewhere → EventDrawer closes, RightPanel returns
+   - Smooth state transitions with conditional rendering
+
+5. **Click Event Propagation**
+   - Props drilling pattern: App → TimelineGrid → EventDot
+   - onClick handler passed through component hierarchy
+   - Clean unidirectional data flow
+
+---
+
 ## ⏳ Next Steps
 
-### Phase 2.2: Event Detail Drawer (Week 1)
-- Create `<EventDrawer>` component (slides from right)
-- Add click handler to event dots
-- Display full event details:
-  - Title, entity logo, tags
-  - Description + strategic significance (visually separated)
-  - Evidence sources (clickable links)
-  - Related events (mini timeline)
-- Close on X button or ESC key
+### Phase 2.3: Functional Filters ✅
 
-### Phase 2.3: Filters (Week 2)
-- Create filter bar with 3 multi-select dropdowns
-- Entity Class filter (Big Tech, Startup, Frontier Lab, Open Source)
-- Impact filter (High, Medium, Low)
-- Action Type filter (8 types)
-- "Clear All Filters" button
-- Hide filtered-out events (don't gray out)
+**Status:** Complete - Pushed to GitHub
+**Time:** ~45 minutes
 
-### Phase 2.4: Pattern Cards (Week 3)
-- Bottom section: "Strategic Patterns & Derived Insights"
-- Pattern cards with type badges, thesis, event count
-- "Show N matching events" → highlight on grid (Explore Overlay Mode)
-- Pattern detail view (modal or drawer)
-- Counter-signals section
+#### Completed
+- ✅ FilterDropdown component created (reusable multi-select dropdown)
+- ✅ Entity Class filter functional (Big Tech, Startup, Frontier Lab, Open Source)
+- ✅ Impact filter functional (High, Medium, Low)
+- ✅ Action Type filter functional (8 types from canonical data)
+- ✅ Multi-select logic with checkboxes
+- ✅ "Clear All Filters" button (appears when filters active)
+- ✅ Filter state preservation across drawer interactions
+- ✅ Dynamic pattern card event counts based on filtered data
 
-### Phase 2.5: Polish & Deploy (Week 4)
+#### Features Implemented
+1. **FilterDropdown Component**
+   - Reusable multi-select dropdown with checkboxes
+   - Click outside to close functionality
+   - Visual indicator (colored dot) when active
+   - Animated dropdown icon rotation
+   - Styled to match design system
+
+2. **Filter Logic**
+   - useMemo for efficient filtered events computation
+   - All filters default to "all selected" state
+   - Hidden events (not grayed out) when filtered
+   - AND logic across all three filters
+
+3. **Filter State Management**
+   - Three independent useState hooks (entityClass, impact, actionType)
+   - hasActiveFilters boolean for conditional UI
+   - clearAllFilters() function to reset state
+   - getPatternEventCount() for dynamic counts
+
+4. **Integration**
+   - TimelineGrid receives filtered events
+   - RightPanel shows correct filtered count
+   - EventDrawer receives filtered events for related events
+   - Pattern cards show dynamic event counts
+
+---
+
+### Phase 2.4: Pattern Card Interactivity ✅
+
+**Status:** Complete - Pushed to GitHub
+**Time:** ~30 minutes
+
+#### Completed
+- ✅ "Show N matching events" buttons functional
+- ✅ Explore Overlay Mode implemented (highlight + dim)
+- ✅ "Clear highlights" button in header
+- ✅ Highlighting persists during scroll and drawer interactions
+- ✅ Pattern data corrected and validated
+- ✅ Pattern detail view deferred to post-MVP
+
+#### Features Implemented
+1. **Explore Overlay Mode**
+   - Highlighted events: 1.2x scale + red ring shadow
+   - Dimmed events: 30% opacity
+   - Higher z-index (20) for highlighted events
+   - Smooth transitions (0.2s duration)
+
+2. **Pattern Highlighting Logic**
+   - highlightedPattern state in App.jsx
+   - supporting_events extracted into Set for O(1) lookup
+   - isHighlighted and isDimmed props passed to EventDot
+   - Conditional styling based on pattern state
+
+3. **Clear Highlights Button**
+   - Positioned in header between title and filters
+   - Only appears when pattern is active
+   - Red accent style with X icon
+   - Resets highlightedPattern to null
+
+4. **Pattern Data Validation**
+   - All pattern IDs verified against data files
+   - supporting_events arrays validated
+   - Event counts corrected on pattern cards
+   - Pattern 3 updated to use real "Coding as Killer Use Case" pattern
+
+---
+
+### Phase 2.5: Polish & Deploy (Week 4) - PLANNED
 - Responsive design (desktop/laptop optimized)
 - Performance testing (<3s load)
-- Accessibility (keyboard nav, ARIA labels)
-- Deploy to Netlify/Vercel
+- Accessibility (keyboard nav, ARIA labels, ESC key support)
+- Deploy to Netlify/Vercel with custom domain
 
 ---
 
@@ -181,11 +291,13 @@ npm run dev
 │   │   ├── components/           # React components
 │   │   │   ├── TimelineGrid.jsx  # Stack × Time grid (6 layers × 12 quarters)
 │   │   │   ├── EventDot.jsx      # Individual event dots
-│   │   │   └── Tooltip.jsx       # Hover tooltips
+│   │   │   ├── Tooltip.jsx       # Hover tooltips
+│   │   │   ├── RightPanel.jsx    # Default right panel with overview
+│   │   │   └── EventDrawer.jsx   # Event detail drawer (slides in)
 │   │   ├── hooks/
 │   │   │   └── useData.js        # Data loading hook (JSONL/JSON)
-│   │   ├── App.jsx               # Root component
-│   │   └── index.css             # Tailwind imports
+│   │   ├── App.jsx               # Root component with state management
+│   │   └── index.css             # Tailwind imports + animations
 │   ├── public/
 │   │   └── data/                 # Symlink to ../../data
 │   ├── package.json
@@ -221,7 +333,7 @@ npm run dev
 ```
 
 **Folder Purposes:**
-- **`app/`** - React UI (grid, tooltips, upcoming drawer/filters). Data loaded from symlinked `/data` folder
+- **`app/`** - React UI (grid, tooltips, drawer, filters, pattern highlighting). Data loaded from symlinked `/data` folder
 - **`data/`** - Golden dataset: 42 events (JSONL), 5 patterns (JSONL), canonical reference data (JSON)
 - **`docs/`** - All documentation: product vision, requirements, data model, quality standards
 - **`scripts/`** - Validation script implementing EVAL_RUBRIC (10-point scale for events, 12-point for patterns)
@@ -242,14 +354,23 @@ npm run dev
 | 2.1 | Project setup | 15m | ✅ Complete |
 | 2.1 | Core grid + tooltips | 30m | ✅ Complete |
 | **Phase 2.1 Total** | **45 minutes** | ✅ |
+| 2.2 | Right panel + event drawer | 30m | ✅ Complete |
+| **Phase 2.2 Total** | **30 minutes** | ✅ |
+| 2.3 | Functional filters | 45m | ✅ Complete |
+| **Phase 2.3 Total** | **45 minutes** | ✅ |
+| 2.4 | Pattern card interactivity | 30m | ✅ Complete |
+| **Phase 2.4 Total** | **30 minutes** | ✅ |
 
-**Total Time:** ~5 hours (Day 1)
+**Total Time:** ~7 hours (Day 1)
 
 ---
 
 ## Next Session
 
-1. Test the UI at http://localhost:5173/
-2. If working: Start Phase 2.2 (Event Drawer)
-3. If issues: Debug and fix before proceeding
-4. Deploy preview once Phase 2.2 complete
+1. Implement Phase 2.5 (Polish & Deploy):
+   - Responsive design testing (desktop/laptop optimized)
+   - Performance testing (<3s load time)
+   - Accessibility improvements (keyboard nav, ARIA labels, ESC key support)
+   - Cross-browser testing (Chrome, Firefox, Safari)
+2. Deploy production version to Netlify/Vercel with custom domain
+3. Create launch assets (social media posts, demo video)

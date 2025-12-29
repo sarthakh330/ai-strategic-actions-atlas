@@ -28,6 +28,20 @@ The primary organizing axis is stack layers (vertical) by time (horizontal: 2023
 - Stack layers: Applications (Horizontal AI, Departmental AI, Vertical AI) and Infrastructure (Model APIs, Training/Compute, Data/Orchestration/Observability)
 - Time range: Q1 2023 - Q4 2025 (12 quarters)
 - Visual encoding: dot size (impact level), color (entity class), border style (confidence level)
+- Click any event to view full details in right panel drawer
+- Hover tooltips for quick event information
+
+**Functional Filters**
+- Multi-select filters: Entity Class, Impact Level, Action Type
+- Dynamic event filtering with real-time grid updates
+- Pattern card event counts update based on active filters
+- "Clear All Filters" button to reset view
+
+**Pattern Exploration Mode**
+- Click "Show N matching events" to highlight events related to a strategic pattern
+- Highlighted events scaled with red ring, non-matching events dimmed to 30%
+- "Clear highlights" button to return to normal view
+- Explore correlations between patterns and events visually
 
 ## Tech Stack
 
@@ -63,9 +77,9 @@ Expected output: All validation checks passed (42 events, 5 patterns validated)
 .
 ├── app/                    # React application
 │   ├── src/
-│   │   ├── components/    # TimelineGrid, EventDot, Tooltip
+│   │   ├── components/    # TimelineGrid, EventDot, Tooltip, RightPanel, EventDrawer
 │   │   ├── hooks/         # useData (JSONL/JSON loading)
-│   │   └── App.jsx        # Root component
+│   │   └── App.jsx        # Root component with state management
 │   └── public/data/       # Symlink to ../../data
 │
 ├── data/                   # Golden dataset
@@ -127,9 +141,13 @@ All patterns include hypothesis language, supporting events, counter-signals, an
 ## Current Status
 
 **Phase 1: Complete** - Data contract, 42 events, 5 patterns, validation framework
-**Phase 2: In Progress** - Interactive UI with timeline grid, hover tooltips, and pattern cards
+**Phase 2.1: Complete** - Interactive UI with timeline grid, hover tooltips, and pattern cards
+**Phase 2.2: Complete** - Right panel with event detail drawer, click interactions, slide-in animations
+**Phase 2.3: Complete** - Functional filters (entity class, impact, action type) with multi-select dropdowns
+**Phase 2.4: Complete** - Pattern overlay mode (highlight matching events, explore mode)
+**Phase 2.5: In Progress** - Polish, accessibility, deployment preparation
 
-Upcoming: Event detail drawer, filters (entity class, impact, action type), pattern overlay mode
+Upcoming: Performance testing, accessibility improvements, production deployment
 
 ## Contributing
 
